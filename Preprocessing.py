@@ -5,20 +5,24 @@ import numpy as np
 
 def preprocesssing(filepath):
     data = pd.read_csv(filepath)
-    # 删除age和embarked中的空值
-    data = data.dropna(subset=['Age', 'Embarked'])
+
+    data["Age"] = data["Age"].where(data["Age"].notnull(), 100)
+    data["Embarked"] = data["Embarked"].where(data["Embarked"].notnull(), 0)
+    data["Fare"] = data["Fare"].where(data["Fare"].notnull(), 0)
 
     sex_table = {'female': 1, 'male': 0}
-    embarked_table = {'S': 0, 'C': 1, 'Q': 2}
-    # 自然数编码
+    embarked_table = {'S': 0.25, 'C': 0.5, 'Q': 0.75, 0: 0}
+    # 编码
     data['Sex'] = data['Sex'].apply(sex_table.__getitem__)
     data['Embarked'] = data['Embarked'].apply(embarked_table.__getitem__)
     # 删除某些特征
     data.drop(['Cabin', 'Ticket', 'Name', 'PassengerId'], axis=1, inplace=True)
     # 数值类型转换
     data = data.astype('float32')
-    # 数据归一化
-
+    # 部分数据归一化
+    data["Pclass"] = data["Pclass"] / data["Pclass"].max()
+    data["Age"] = data["Age"]/data["Age"].max()
+    data["Fare"] = data["Fare"]/data["Fare"].max()
     return data
 
 
