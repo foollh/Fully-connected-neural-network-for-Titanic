@@ -19,12 +19,12 @@ def preprocesssing(filepath):
     data = data.astype('float32')
     # 数据归一化
 
-    return data.values[0:600], data.values[600:712]
+    return data
 
 
 if __name__ == "__main__":
-    train_data, test_data = preprocesssing("../DataSet/titanic/train.csv")
-    # test_data = preprocesssing("../DataSet/titanic/test.csv")
+    train_data = preprocesssing("../DataSet/titanic/train.csv")
+    test_data = preprocesssing("../DataSet/titanic/test.csv")
 
-    print(train_data)
-    print(test_data)
+    print(train_data.info())
+    print(test_data.info())
